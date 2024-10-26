@@ -1,4 +1,3 @@
-// src/components/OrganizeParty.js
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebaseConfig';
 import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
@@ -12,23 +11,30 @@ const OrganizeParty = ({ userEmail, fetchUserEvents }) => {
   const [theme, setTheme] = useState('');
   const [location, setLocation] = useState('');
   const [participantLimit, setParticipantLimit] = useState(0);
-  const [budget, setBudget] = useState(0); // New state for budget
+  const [budget, setBudget] = useState(0);
   const [accepting, setAccepting] = useState(false);
+  const [isApprovalRequired, setIsApprovalRequired] = useState(false);
   const [statusMessage, setStatusMessage] = useState('');
   const [organizerName, setOrganizerName] = useState('');
   const [organizerEmail, setOrganizerEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [rolePercentages, setRolePercentages] = useState([
+    { role: 'Se ocupa de bautura', percentage: 0 },
+    { role: 'Se ocupa de mancare', percentage: 0 },
+    { role: 'Se ocupa de locatie', percentage: 0 },
+  ]);
+  const [budgetAllocations, setBudgetAllocations] = useState([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        // Query to find user by email
         const userQuery = query(collection(db, 'users'), where('email', '==', userEmail));
         const querySnapshot = await getDocs(userQuery);
         if (!querySnapshot.empty) {
           const userData = querySnapshot.docs[0].data();
           const fullName = `${userData.firstName} ${userData.lastName}`;
           setOrganizerName(fullName);
-          setOrganizerEmail(userData.email); // Fetch the user's email
+          setOrganizerEmail(userData.email);
         } else {
           console.error("User not found.");
         }
@@ -40,10 +46,45 @@ const OrganizeParty = ({ userEmail, fetchUserEvents }) => {
     fetchUserData();
   }, [userEmail]);
 
+  const handleRolePercentageChange = (index, value) => {
+    const newRolePercentages = [...rolePercentages];
+    newRolePercentages[index].percentage = Number(value);
+    setRolePercentages(newRolePercentages);
+  };
+
+  const totalPercentage = () => {
+    return rolePercentages.reduce((total, role) => total + role.percentage, 0);
+  };
+
+  const validatePercentages = () => {
+    return totalPercentage() <= 100;
+  };
+
+  const calculateBudgetAllocation = (participantsCount) => {
+    const totalBudget = budget * participantsCount;
+    const allocations = rolePercentages.map(role => ({
+      ...role,
+      allocatedBudget: (totalBudget * role.percentage) / 100,
+    }));
+    setBudgetAllocations(allocations);
+    return allocations;
+  };
+
+  // Calculate budget allocations whenever budget, participant count, or percentages change
+  useEffect(() => {
+    if (participantLimit > 0 && budget > 0) {
+      calculateBudgetAllocation(participantLimit);
+    }
+  }, [participantLimit, budget, rolePercentages]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validatePercentages()) {
+      setStatusMessage('Percentages must add up to 100% or less.');
+      return;
+    }
     setStatusMessage('Creating event...');
-    setAccepting(true);
+    setIsSubmitting(true);
     try {
       const eventData = {
         eventName,
@@ -53,23 +94,47 @@ const OrganizeParty = ({ userEmail, fetchUserEvents }) => {
         theme,
         location,
         participantLimit,
-        budget, // Include budget in event data
-        participants: [organizerEmail], // Automatically add organizer as participant
+        budget,
+        participants: [], // Start with an empty participants list
+        pendingParticipants: [], // New field for pending approvals
         organizer: {
-          name: organizerName, // Use fetched organizer name
-          email: organizerEmail, // Use fetched organizer email
+          name: organizerName,
+          email: organizerEmail,
         },
-        accepting, // Indicates if the event is accepting registrations
+        accepting,
+        isApprovalRequired, // Add approval requirement
+        rolePercentages, // Save role percentages
+        budgetAllocations, // Save calculated budget allocations
       };
       await addDoc(collection(db, 'events'), eventData);
       setStatusMessage('Event created successfully!');
-      fetchUserEvents(userEmail); // Fetch updated user events
+      fetchUserEvents(userEmail);
+      resetForm();
     } catch (error) {
       console.error("Error creating event:", error);
       setStatusMessage('Error creating event. Please try again.');
     } finally {
-      setAccepting(false);
+      setIsSubmitting(false);
     }
+  };
+
+  const resetForm = () => {
+    setEventName('');
+    setDate('');
+    setDescription('');
+    setIsAdult(false);
+    setTheme('');
+    setLocation('');
+    setParticipantLimit(0);
+    setBudget(0);
+    setAccepting(false);
+    setIsApprovalRequired(false);
+    setRolePercentages([
+      { role: 'Se ocupa de bautura', percentage: 0 },
+      { role: 'Se ocupa de mancare', percentage: 0 },
+      { role: 'Se ocupa de locatie', percentage: 0 },
+    ]);
+    setBudgetAllocations([]); // Reset budget allocations
   };
 
   return (
@@ -131,7 +196,7 @@ const OrganizeParty = ({ userEmail, fetchUserEvents }) => {
           type="number" 
           placeholder="Max number of participants" 
           value={participantLimit} 
-          onChange={e => setParticipantLimit(Number(e.target.value))} // Ensure this is a number
+          onChange={e => setParticipantLimit(Number(e.target.value))} 
           min="1" 
           required 
         />
@@ -153,11 +218,42 @@ const OrganizeParty = ({ userEmail, fetchUserEvents }) => {
           type="number" 
           placeholder="Enter budget per person" 
           value={budget} 
-          onChange={e => setBudget(Number(e.target.value))} // Ensure this is a number
+          onChange={e => setBudget(Number(e.target.value))} 
           min="0" 
           required 
         />
       </label>
+
+      {/* Role Percentage Section */}
+      <h4>Role Percentages</h4>
+      {rolePercentages.map((roleData, index) => (
+        <div key={index}>
+          <label>
+            Role: {roleData.role}
+          </label>
+          <label>
+            Percentage:
+            <input 
+              type="number" 
+              value={roleData.percentage} 
+              onChange={e => handleRolePercentageChange(index, e.target.value)} 
+              min="0" 
+              max="100" 
+              required 
+            />
+          </label>
+        </div>
+      ))}
+
+      {/* Display Budget Allocations */}
+      <div>
+        <h4>Budget Allocations:</h4>
+        {budgetAllocations.map((role) => (
+          <p key={role.role}>
+            {role.role}: ${role.allocatedBudget ? role.allocatedBudget.toFixed(2) : '0.00'}
+          </p>
+        ))}
+      </div>
 
       <div>
         <label>
@@ -170,8 +266,19 @@ const OrganizeParty = ({ userEmail, fetchUserEvents }) => {
         </label>
       </div>
 
-      <button type="submit" disabled={accepting}>
-        {accepting ? 'Waiting to be accepted...' : 'Create Event'}
+      <div>
+        <label>
+          <input 
+            type="checkbox" 
+            checked={isApprovalRequired} 
+            onChange={() => setIsApprovalRequired(!isApprovalRequired)} 
+          />
+          Require organizer approval for participants
+        </label>
+      </div>
+
+      <button type="submit" disabled={isSubmitting}>
+        {isSubmitting ? 'Creating Event...' : 'Create Event'}
       </button>
       {statusMessage && <p>{statusMessage}</p>}
     </form>
