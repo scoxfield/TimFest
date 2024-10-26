@@ -1,0 +1,53 @@
+/* src/components/OrganizeParty.css */
+
+.organize-party-form {
+    border: 1px solid #007bff;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 20px;
+    background-color: #f9f9f9;
+  }
+  
+  .organize-party-form h3 {
+    color: #007bff;
+  }
+  
+  .organize-party-form input,
+  .organize-party-form textarea,
+  .organize-party-form select {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .organize-party-form textarea {
+    resize: vertical; /* Allows vertical resizing of the textarea */
+  }
+  
+  .organize-party-form button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+  }
+  
+  .organize-party-form button:disabled {
+    background-color: #cccccc; /* Grey out the button when disabled */
+    cursor: not-allowed;
+  }
+  
+  .organize-party-form button:hover:not(:disabled) {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  
+  .organize-party-form p {
+    color: #d9534f; /* Error message color */
+    font-weight: bold;
+  }
+  

@@ -1,0 +1,145 @@
+/* src/components/LoginPage.css */
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Ocupă întreaga înălțime a ferestrei */
+    background-color: #f8f9fa; /* Culoare de fundal deschisă */
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Umbră ușoară */
+    border-radius: 8px; /* Colțuri rotunjite */
+    width: 300px; /* Lățimea panoului */
+    margin: auto; /* Center the panel */
+}
+
+h2 {
+    margin-bottom: 20px; /* Margine inferioară pentru titlu */
+}
+
+.form-group {
+    margin-bottom: 15px; /* Margine inferioară pentru grupul de formular */
+    width: 100%; /* Lățime completă */
+}
+
+label {
+    display: block; /* Etichetele vor ocupa întreaga lățime */
+    margin-bottom: 5px; /* Margine inferioară pentru etichete */
+}
+
+input {
+    width: 100%; /* Lățime completă */
+    padding: 10px; /* Spațiere interioară */
+    border: 1px solid #ccc; /* Bordură gri deschis */
+    border-radius: 4px; /* Colțuri rotunjite */
+    box-sizing: border-box; /* Include padding-ul în lățimea totală */
+}
+
+button {
+    background-color: #007bff; /* Culoarea de fundal a butonului */
+    color: white; /* Culoarea textului */
+    padding: 10px 20px; /* Spațiere interioară */
+    border: none; /* Fără bordură */
+    border-radius: 4px; /* Colțuri rotunjite */
+    cursor: pointer; /* Cursorul devine pointer */
+    transition: background-color 0.3s; /* Tranziție pentru culoare */
+}
+
+button:hover {
+    background-color: #0056b3; /* Culoare mai închisă la hover */
+}
+
+.error-message {
+    color: red; /* Culoarea textului pentru mesajele de eroare */
+    margin-bottom: 15px; /* Margine inferioară pentru mesajele de eroare */
+}
+
+.toggle-text {
+    margin-top: 10px; /* Margine superioară pentru textul de schimbare */
+    color: #007bff; /* Culoarea textului */
+    cursor: pointer; /* Cursorul devine pointer */
+    text-decoration: underline; /* Sublinează textul */
+}
+
+.toggle-text:hover {
+    color: #0056b3; /* Culoare mai închisă la hover */
+}
+/* src/components/LoginPage.css */
+
+/* Add this CSS for the fade transition */
+.fade-enter {
+    opacity: 0;
+  }
+  
+  .fade-enter-active {
+    opacity: 1;
+    transition: opacity 300ms ease-in;
+  }
+  
+  .fade-exit {
+    opacity: 1;
+  }
+  
+  .fade-exit-active {
+    opacity: 0;
+    transition: opacity 300ms ease-in;
+  }
+  
+  /* Existing styles from your previous CSS */
+  .login-container {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  button {
+    padding: 10px;
+    background-color: #2d8cf0;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button:disabled {
+    background-color: #999;
+  }
+  
+  .error-message {
+    color: red;
+  }
+  
+  .info-message {
+    color: green;
+  }
+  
+  .toggle-text {
+    cursor: pointer;
+    color: #2d8cf0;
+    text-align: center;
+    margin-top: 15px;
+  }
+  

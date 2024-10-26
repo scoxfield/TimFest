@@ -1,0 +1,74 @@
+/* src/components/LandingPage.css */
+
+.landing-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #08D9D6 0%, #FF2E63 100%); /* Gradient de fundal */
+    color: #EAEAEA; /* Text principal */
+    text-align: center;
+    padding: 20px;
+  }
+  
+  h1 {
+    color: #EAEAEA; /* Titlu */
+  }
+  
+  h2 {
+    color: #252A34; /* Subtitlu */
+  }
+  
+  .landing-button {
+    background-color: #FF2E63; /* Fundal buton */
+    color: #EAEAEA; /* Text buton */
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, transform 0.2s; /* Animație */
+  }
+  
+  .landing-button:hover {
+    background-color: #EAEAEA; /* Fundal buton la hover */
+    color: #252A34; /* Text buton la hover */
+    transform: scale(1.05); /* Efect de mărire la hover */
+  }
+  
+.counters {
+    display: flex;
+    flex-direction: column; /* Align counters vertically */
+    align-items: center; /* Center the counters */
+    margin: 20px 0; /* Add margin for spacing */
+  }
+  
+  .counter {
+    background-color: #EAEAEA; /* Background color for counter */
+    color: #252A34; /* Text color for counter */
+    padding: 15px 20px; /* Padding around the counter */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional shadow for a 3D effect */
+    margin: 10px; /* Margin between counters */
+    transition: transform 0.3s; /* Add a small transition effect */
+  }
+  
+  .counter:hover {
+    transform: scale(1.05); /* Slightly enlarge on hover */
+  }
+  
+.slide-enter {
+    transform: translateX(100%);
+  }
+  .slide-enter-active {
+    transform: translateX(0);
+    transition: transform 300ms ease-in;
+  }
+  .slide-exit {
+    transform: translateX(0);
+  }
+  .slide-exit-active {
+    transform: translateX(-100%);
+    transition: transform 300ms ease-in;
+  }

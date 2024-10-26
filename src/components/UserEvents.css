@@ -1,0 +1,55 @@
+/* src/components/UserEvents.css */
+.events-box {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 20px;
+    background-color: #f9f9f9;
+}
+
+.events-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.event-item {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+}
+
+.event-item h4 {
+    margin: 0;
+    color: #333;
+}
+
+.event-item p {
+    margin: 4px 0;
+    color: #555;
+}
+
+.events-list li:last-child {
+    border-bottom: none;
+}
+
+.edit-event-form {
+    margin-top: 20px;
+    border: 1px solid #007BFF;
+    border-radius: 8px;
+    padding: 16px;
+    background-color: #e7f0ff;
+}
+
+.edit-event-form label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+.edit-event-form input,
+.edit-event-form textarea,
+.edit-event-form select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
